@@ -65,20 +65,22 @@ export function initMaxim({
     tracks.forEach((t, i) => {
       const playable = isPlayable(t)
       const div = document.createElement('div')
-      div.className = 'track' +
-        (i === currentIndex ? ' active' : '') +
-        (!playable ? ' unreleased' : '')
-
-      const num = String(i + 1).padStart(2, '0')
-      div.innerHTML =
-        `<span class="num">${num}</span>
-         <span class="name" title="${t.title ?? ''}">${t.title ?? 'Untitled'}</span>
-         ${!playable ? '<span class="badge">UNRELEASED</span>' : ''}`
-
+  
+      // Nur 'track' + 'active' Klasse, keine 'unreleased' Klasse mehr
+      div.className = 'track' + (i === currentIndex ? ' active' : '')
+  
+      const num = String(i + 1).padStart(3, '0')
+  
+      // Nur die Nummer anzeigen – kein Titel, kein Badge, kein title-Attribut
+      div.innerHTML = `<span class="num">${num}</span>`
+  
+      // Klick nur wenn abspielbar
       if (playable) div.onclick = () => switchTrack(i)
+  
       playlistEl.appendChild(div)
     })
   }
+  
 
   // --- Track switch (skips unreleased) ---
   function switchTrack(requestedIndex) {
